@@ -1,0 +1,55 @@
+name: Node.js CI
+
+on:
+  push:
+    branches: [ "main" ]
+   
+jobs:
+  build:
+
+    runs-on: self-hosted
+
+    strategy:
+      matrix:
+        node-version: [18.x, 20.x, 22.x]
+        # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
+
+    steps:
+      # Checkout the code from GitHub
+      - uses: actions/checkout@v4
+
+      # Setup Node.js version
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'npm'
+
+      # Install dependencies for the backend (server)
+      - name: Install server dependencies
+        working-directory: ./server
+        run: npm ci
+
+      # Install dependencies for the frontend (client)
+      - name: Install client dependencies
+        working-directory: ./client
+        run: npm ci
+
+      # Build the frontend (client)
+      - name: Build client
+        working-directory: ./client
+        run: npm run build --if-present
+
+      # Build the backend (server) if applicable
+      - name: Build server
+        working-directory: ./server
+        run: npm run build --if-present
+
+      # Start the backend (server) and client for testing
+      - name: Start backend (server) and frontend (client)
+        run: |
+          # Start the backend server in the background
+          (cd server && npm start) &
+
+          # Start the frontend client
+          (cd client && npm start)
