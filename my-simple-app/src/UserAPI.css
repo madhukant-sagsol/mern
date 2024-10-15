@@ -1,0 +1,32 @@
+.user-api-container {
+    padding: 20px;
+    font-family: Arial, sans-serif;
+  }
+  
+  .create-user-form {
+    margin-bottom: 20px;
+  }
+  
+  .create-user-form input {
+    margin-right: 10px;
+    padding: 5px;
+  }
+  
+  .create-user-form button {
+    padding: 5px 10px;
+  }
+  
+  .user-list {
+    list-style-type: none;
+    padding: 0;
+  }
+  
+  .user-list-item {
+    margin-bottom: 10px;
+  }
+  
+  .user-details {
+    margin-top: 20px;
+    border-top: 1px solid #ccc;
+    padding-top: 10px;
+  }
