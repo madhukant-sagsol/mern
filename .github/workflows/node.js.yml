@@ -15,23 +15,18 @@ jobs:
         # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
 
     steps:
-      # permission the code from GitHub
+      # Step to ensure correct permissions for the working directory
       - name: Fix permissions for working directory
         run: |
           sudo chown -R $USER:$USER /var/snap/amazon-ssm-agent/9565/actions-runner/_work/mern/mern
           sudo chmod -R 755 /var/snap/amazon-ssm-agent/9565/actions-runner/_work/mern/mern/*
 
       # Checkout the code from GitHub
-      - uses: actions/checkout@v4
-      
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
-       
-      
-
-     
-
-      # Setup Node.js version
-      - name: Use Node.js ${{ matrix.node-version }}
+      # Setup Node.js version for the backend (server)
+      - name: Setup Node.js for server
         uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node-version }}
@@ -40,24 +35,31 @@ jobs:
       # Install dependencies for the backend (server)
       - name: Install server dependencies
         working-directory: ./mern/server
-        run: npm install  # Or npm install if package-lock.json is not available
-      
+        run: npm install  # You can switch to npm ci if you have a package-lock.json
+
+      # Setup Node.js version for the frontend (client)
+      - name: Setup Node.js for client
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'npm'
+
       # Install dependencies for the frontend (client)
       - name: Install client dependencies
         working-directory: ./mern/my-simple-app
-        run: npm install  # Or npm install if package-lock.json is not available
+        run: npm install  # You can switch to npm ci if you have a package-lock.json
 
       # Build the frontend (client)
       - name: Build client
         working-directory: ./mern/my-simple-app
         run: npm run build --if-present
 
-      # Build the backend (server) if applicable
+      # Build the backend (server)
       - name: Build server
         working-directory: ./mern/server
         run: npm run build --if-present
 
-      # Start the backend (server) and client for testing
+      # Start the backend (server) and frontend (client)
       - name: Start backend (server) and frontend (client)
         run: |
           # Start the backend server in the background
