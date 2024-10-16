@@ -28,7 +28,6 @@ jobs:
       # Fix permissions on the node_modules directory to allow the runner to delete it
       - name: Fix permissions for node_modules
         run: |
-          sudo chown -R $USER:$USER ./mern/my-simple-app/node_modules
           sudo chmod -R 755 ./mern/my-simple-app/*
           sudo chmod -R 755 ./mern/server/*
 
