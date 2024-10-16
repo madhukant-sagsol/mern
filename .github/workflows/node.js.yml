@@ -18,6 +18,18 @@ jobs:
       # Checkout the code from GitHub
       - uses: actions/checkout@v4
 
+      # Ensure proper permissions for the directories
+      - name: Fix permissions
+        run: |
+          sudo chown -R $USER:$USER ./mern/server
+          sudo chown -R $USER:$USER ./mern/my-simple-app
+
+      # Clean up any existing node_modules or old build files
+      - name: Clean up old files
+        run: |
+          sudo rm -rf ./mern/server/node_modules
+          sudo rm -rf ./mern/my-simple-app/node_modules
+
       # Setup Node.js version
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v4
@@ -35,22 +47,21 @@ jobs:
         working-directory: ./mern/my-simple-app
         run: npm ci  # Or npm install if package-lock.json is not available
 
-
       # Build the frontend (client)
       - name: Build client
-        working-directory: ./my-simple-app
+        working-directory: ./mern/my-simple-app
         run: npm run build --if-present
 
       # Build the backend (server) if applicable
       - name: Build server
-        working-directory: ./server
+        working-directory: ./mern/server
         run: npm run build --if-present
 
       # Start the backend (server) and client for testing
       - name: Start backend (server) and frontend (client)
         run: |
           # Start the backend server in the background
-          (cd server && npm start) &
+          (cd ./mern/server && npm start) &
 
           # Start the frontend client
-          (cd my-simple-app && npm start)
+          (cd ./mern/my-simple-app && npm start)
