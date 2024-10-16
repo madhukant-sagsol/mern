@@ -27,13 +27,14 @@ jobs:
 
       # Install dependencies for the backend (server)
       - name: Install server dependencies
-        working-directory: ./server
-        run: npm install
+        working-directory: /var/snap/amazon-ssm-agent/9565/actions-runner/_work/mern/mern/server
+        run: npm ci  # Or npm install if package-lock.json is not available
       
       # Install dependencies for the frontend (client)
       - name: Install client dependencies
-        working-directory: ./my-simple-app
-        run: npm install
+        working-directory: /var/snap/amazon-ssm-agent/9565/actions-runner/_work/mern/mern/my-simple-app
+        run: npm ci  # Or npm install if package-lock.json is not available
+
 
       # Build the frontend (client)
       - name: Build client
