@@ -18,13 +18,13 @@ jobs:
       # Checkout the code from GitHub
       - uses: actions/checkout@v4
 
-      # Ensure proper permissions for the directories
-      - name: Fix permissions
+      # Fix permissions on the node_modules directory to allow the runner to delete it
+      - name: Fix permissions for node_modules
         run: |
-          sudo chown -R $USER:$USER ./mern/server
-          sudo chown -R $USER:$USER ./mern/my-simple-app
+          sudo chown -R $USER:$USER ./mern/my-simple-app/node_modules
+          sudo chmod -R 755 ./mern/my-simple-app/node_modules
 
-      # Clean up any existing node_modules or old build files
+      # Clean up old node_modules to ensure fresh installations
       - name: Clean up old files
         run: |
           sudo rm -rf ./mern/server/node_modules
