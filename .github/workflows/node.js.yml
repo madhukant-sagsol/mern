@@ -25,19 +25,10 @@ jobs:
       - uses: actions/checkout@v4
       
 
-      # Fix permissions on the node_modules directory to allow the runner to delete it
-      - name: Fix permissions for node_modules
-        run: |
-          sudo chmod -R 755 ./mern/my-simple-app/*
-          sudo chmod -R 755 ./mern/server/*
-
+       
       
 
-      # Clean up old node_modules to ensure fresh installations
-      - name: Clean up old files
-        run: |
-          sudo rm -rf ./mern/server/node_modules
-          sudo rm -rf ./mern/my-simple-app/node_modules
+     
 
       # Setup Node.js version
       - name: Use Node.js ${{ matrix.node-version }}
