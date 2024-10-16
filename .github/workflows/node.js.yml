@@ -40,12 +40,12 @@ jobs:
       # Install dependencies for the backend (server)
       - name: Install server dependencies
         working-directory: ./mern/server
-        run: npm ci  # Or npm install if package-lock.json is not available
+        run: npm install  # Or npm install if package-lock.json is not available
       
       # Install dependencies for the frontend (client)
       - name: Install client dependencies
         working-directory: ./mern/my-simple-app
-        run: npm ci  # Or npm install if package-lock.json is not available
+        run: npm install  # Or npm install if package-lock.json is not available
 
       # Build the frontend (client)
       - name: Build client
