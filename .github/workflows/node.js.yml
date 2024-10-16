@@ -22,7 +22,8 @@ jobs:
       - name: Fix permissions for node_modules
         run: |
           sudo chown -R $USER:$USER ./mern/my-simple-app/node_modules
-          sudo chmod -R 755 ./mern/my-simple-app/node_modules
+          sudo chmod -R 755 ./mern/my-simple-app/
+          sudo chmod -R 755 ./mern/server/
 
       # Clean up old node_modules to ensure fresh installations
       - name: Clean up old files
