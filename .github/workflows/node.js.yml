@@ -25,29 +25,29 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      # Setup Node.js version for the backend (server)
+      # Setup Node.js version and install dependencies for the backend (server)
       - name: Setup Node.js for server
+        working-directory: ./mern/server
         uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node-version }}
           cache: 'npm'
 
-      # Install dependencies for the backend (server)
       - name: Install server dependencies
         working-directory: ./mern/server
-        run: npm install  # You can switch to npm ci if you have a package-lock.json
+        run: npm ci  # Use npm ci for a consistent build based on package-lock.json
 
-      # Setup Node.js version for the frontend (client)
+      # Setup Node.js version and install dependencies for the frontend (client)
       - name: Setup Node.js for client
+        working-directory: ./mern/my-simple-app
         uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node-version }}
           cache: 'npm'
 
-      # Install dependencies for the frontend (client)
       - name: Install client dependencies
         working-directory: ./mern/my-simple-app
-        run: npm install  # You can switch to npm ci if you have a package-lock.json
+        run: npm ci  # Use npm ci for a consistent build based on package-lock.json
 
       # Build the frontend (client)
       - name: Build client
