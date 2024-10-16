@@ -28,12 +28,12 @@ jobs:
       # Install dependencies for the backend (server)
       - name: Install server dependencies
         working-directory: ./server
-        run: npm ci
-
+        run: npm install
+      
       # Install dependencies for the frontend (client)
       - name: Install client dependencies
         working-directory: ./my-simple-app
-        run: npm ci
+        run: npm install
 
       # Build the frontend (client)
       - name: Build client
