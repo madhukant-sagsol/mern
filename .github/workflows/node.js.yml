@@ -23,6 +23,7 @@ jobs:
 
       # Checkout the code from GitHub
       - name: Checkout repository
+        working-directory: ./mern/server
         uses: actions/checkout@v4
 
       # Setup Node.js version and install dependencies for the backend (server)
@@ -35,7 +36,12 @@ jobs:
 
       - name: Install server dependencies
         working-directory: ./mern/server
-        run: npm ci  # Use npm ci for a consistent build based on package-lock.json
+        run: npm install  # Use npm ci for a consistent build based on package-lock.json
+
+      # Checkout the code from GitHub
+      - name: Checkout repository
+        working-directory: ./mern/my-simple-app
+        uses: actions/checkout@v4
 
       # Setup Node.js version and install dependencies for the frontend (client)
       - name: Setup Node.js for client
@@ -47,7 +53,7 @@ jobs:
 
       - name: Install client dependencies
         working-directory: ./mern/my-simple-app
-        run: npm ci  # Use npm ci for a consistent build based on package-lock.json
+        run: npm instal  # Use npm ci for a consistent build based on package-lock.json
 
       # Build the frontend (client)
       - name: Build client
