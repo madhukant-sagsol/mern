@@ -1,9 +1,14 @@
+# This workflow will do a clean installation of node dependencies, cache/restore them, build the source code and run tests across different versions of node
+# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-nodejs
+
 name: Node.js CI
 
 on:
   push:
     branches: [ "main" ]
-   
+  pull_request:
+    branches: [ "main" ]
+
 jobs:
   build:
 
@@ -15,61 +20,12 @@ jobs:
         # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
 
     steps:
-      # Step to ensure correct permissions for the working directory
-      - name: Fix permissions for working directory
-        run: |
-          sudo chown -R $USER:$USER /var/snap/amazon-ssm-agent/9565/actions-runner/_work/mern/mern
-          sudo chmod -R 755 /var/snap/amazon-ssm-agent/9565/actions-runner/_work/mern/mern/*
-
-      # Checkout the code from GitHub
-      - name: Checkout repository
-        working-directory: ./mern/server
-        uses: actions/checkout@v4
-
-      # Setup Node.js version and install dependencies for the backend (server)
-      - name: Setup Node.js for server
-        working-directory: ./mern/server
-        uses: actions/setup-node@v4
-        with:
-          node-version: ${{ matrix.node-version }}
-          cache: 'npm'
-
-      - name: Install server dependencies
-        working-directory: ./mern/server
-        run: npm install  # Use npm ci for a consistent build based on package-lock.json
-
-      # Checkout the code from GitHub
-      - name: Checkout repository
-        working-directory: ./mern/my-simple-app
-        uses: actions/checkout@v4
-
-      # Setup Node.js version and install dependencies for the frontend (client)
-      - name: Setup Node.js for client
-        working-directory: ./mern/my-simple-app
-        uses: actions/setup-node@v4
-        with:
-          node-version: ${{ matrix.node-version }}
-          cache: 'npm'
-
-      - name: Install client dependencies
-        working-directory: ./mern/my-simple-app
-        run: npm instal  # Use npm ci for a consistent build based on package-lock.json
-
-      # Build the frontend (client)
-      - name: Build client
-        working-directory: ./mern/my-simple-app
-        run: npm run build --if-present
-
-      # Build the backend (server)
-      - name: Build server
-        working-directory: ./mern/server
-        run: npm run build --if-present
-
-      # Start the backend (server) and frontend (client)
-      - name: Start backend (server) and frontend (client)
-        run: |
-          # Start the backend server in the background
-          (cd ./mern/server && npm start) &
-
-          # Start the frontend client
-          (cd ./mern/my-simple-app && npm start)
+    - uses: actions/checkout@v4
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ matrix.node-version }}
+        cache: 'npm'
+    - run: npm ci
+    - run: npm run build --if-present
+    - run: npm test
